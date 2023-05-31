@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weptoon/screens/home.dart';
+import 'package:weptoon/screens/homeScreen.dart';
 import 'package:weptoon/services/apiService.dart';
 
 void main() {
@@ -12,9 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(
-        child: Home(),
-      ),
+      home: Home(),
     );
   }
 }
