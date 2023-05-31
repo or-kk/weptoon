@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:weptoon/models/webtoon.dart';
 
 class ApiService {
-  final String baseUrl = "https://webtoon-crawler.nomadcoders.workers.dev";
-  final String today = "today";
+  static const String baseUrl = "https://webtoon-crawler.nomadcoders.workers.dev";
+  static const String today = "today";
 
-  Future<List<Webtoon>> getTodayToons() async {
+  static Future<List<Webtoon>> getTodayToons() async {
     List<Webtoon> webtoonList = [];
 
     final url = Uri.parse('$baseUrl/$today');
@@ -17,6 +17,7 @@ class ApiService {
 
       for (var webtoon in webtoons) {
         webtoonList.add(Webtoon.fromJson(webtoon));
+        print(webtoonList);
       }
 
       return webtoonList;
