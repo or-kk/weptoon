@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:weptoon/services/ApiService.dart';
 
@@ -23,12 +24,48 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   late Future<WebtoonDetail> webtoon;
   late Future<List<WebtoonEpisode>> episodes;
+  late SharedPreferences prefs;
+  bool isLike = false;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likeToons = prefs.getStringList('likeToons');
+
+    if (likeToons != null) {
+      if (likeToons.contains(widget.id)) {
+        setState(() {
+          isLike = true;
+        });
+      }
+    } else {
+      await prefs.setStringList('likeToons', []);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     webtoon = ApiService.getTodayById(widget.id);
     episodes = ApiService.getLatestEpisodeById(widget.id);
+
+    initPrefs();
+  }
+
+  onHeartTap() async {
+    final likeToons = prefs.getStringList('likeToons');
+    if (likeToons != null) {
+      if (isLike) {
+        likeToons.remove(widget.id);
+      } else {
+        likeToons.add(widget.id);
+      }
+
+      await prefs.setStringList('likeToons', likeToons);
+
+      setState(() {
+        isLike = !isLike;
+      });
+    }
   }
 
   @override
@@ -39,6 +76,16 @@ class _DetailScreenState extends State<DetailScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(
+              isLike
+                  ? Icons.favorite_outlined
+                  : Icons.favorite_outline_outlined,
+            ),
+          )
+        ],
         elevation: 0,
         title: Text(
           widget.title,
@@ -132,4 +179,3 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
-
