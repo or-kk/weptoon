@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:weptoon/services/ApiService.dart';
 
 import '../models/webtoonDetail.dart';
 import '../models/webtoonEpisode.dart';
+import '../widgets/episodeWidget.dart';
 
 class DetailScreen extends StatefulWidget {
   final String title, thumb, id;
@@ -116,44 +118,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     return Column(
                       children: [
                         for (var episode in future.data!)
-                          Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                  color: Colors.green.shade300, width: 2),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 5,
-                                  offset: const Offset(5, 5),
-                                  color: Colors.black.withOpacity(0.1),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 20,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    episode.title,
-                                    style: TextStyle(
-                                        color: Colors.green.shade400,
-                                        fontSize: 14),
-                                  ),
-                                  Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: Colors.green.shade300,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
+                          Episode(episode: episode, webtoonId: widget.id)
                       ],
                     );
                   }
@@ -167,3 +132,4 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
+
